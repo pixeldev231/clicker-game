@@ -10,78 +10,56 @@
         <section>
             <div class="main">
                 <div class="left">
-                    <p>gold <br /><span class="goldcost goldentext">50000</span></p>
+                    <p>gold <br /><span class="goldcost goldentext">0</span></p>
                     <div class="goldimagecontainer">
                         <img src="./assets/gold.png" alt="" srcset="" class="goldimg" onclick="incrementgold(event)" draggable="false">
                     </div>
                 </div>
-                <div class="right">
-                    <div class="upgrade" onclick="buyclicker()">
+
+                <div>
+                <script id="upgradetemplate" type="text/template">
+                    <div class="upgrade" onclick="buyupgrade('{{name}}')">
                         <div class="left-sec">
-                        <img src="./assets/cursor.png" alt="" class="upgradeimg">
+                            <img src="{{image}}" alt="" class="upgradeimg"/>
                         </div>
                         <div class="mid-sec">
-                        <h4>Clicker</h4>
+                        <h4>{{name}}</h4>
                         <div class="costinfo">
-                            <p class="costtext"><span class="clickercost">15</span></p>
+                            <p class="costtext"><span class="{{name}}cost">{{cost}}</span></p>
                             <img src="./assets/gold.png" alt="" class="goldimage">
                         </div>
                         </div>
-                        <div class="right-sec"><span class="clickerlevel">0</span></div>
-                        <div class="nextlevelclicker">
+                        <div class="right-sec"><span class="{{name}}level">0</span></div>
+                        <div class="nextlevel{{name}}">
                             <p>
-                                +<span class="cursorincrease">0.1</span> golds <br /> per second
+                                +<span class="{{name}}increase">{{increase}}</span> golds <br /> per second
                             </p>
                         </div>
                     </div>
 
-                    <div class="upgrade" onclick="buypickaxe()">
-                        <div class="left-sec">
-                        <img src="./assets/pickaxe.png" alt="" class="upgradeimg">
-                        </div>
-                        <div class="mid-sec">
-                        <h4>Pickaxe</h4>
-                        <div class="costinfo">
-                            <p class="costtext"><span class="pickaxecost">100</span></p>
-                            <img src="./assets/gold.png" alt="" class="goldimage">
-                        </div>
-                        </div>
-                        <div class="right-sec"><span class="pickaxelevel">0</span></div>
-                        <div class="nextlevelpickaxe">
-                            <p>
-                                +<span class="pickaxeincrease">1</span> golds <br /> per second
-                            </p>
-                        </div>
-                    </div>
+                </script>
 
-                    <div class="upgrade" onclick="buyminer()">
-                        <div class="left-sec">
-                        <img src="./assets/miner.png" alt="" class="upgradeimg">
-                        </div>
-                        <div class="mid-sec">
-                        <h4>Miner</h4>
-                        <div class="costinfo">
-                            <p class="costtext"><span class="minercost">1100</span></p>
-                            <img src="./assets/gold.png" alt="" class="goldimage">
-                        </div>
-                        </div>
-                        <div class="right-sec"><span class="minerlevel">0</span></div>
-                        <div class="nextlevelminer">
-                            <p>
-                                +<span class="minerincrease">8</span> golds <br /> per second
-                            </p>
-                        </div>
-                    </div>
+                <div class="right" id="upgradescontainer">
+
                 </div>
-            </div>
 
             <div class="statistics">
                 <div class="texts">
                     <p> per second: <span id="gpstext" class="goldentext">0</span></p>
                 </div>
             </div>
+
+            <div class="utilbuttons">
+                <p>seu jogo sera salvo a cada minuto</p>
+                <button class="utilbutton" onclick="save()">
+                Save
+                </button>
+                <button class="utilbutton" onclick="load()">
+                Load
+                </button>
+            </div>
         </section>
 
-        <script src="index.js"></script>
+        <script type="module" src="index.js"></script>
     </body>
 </html>
