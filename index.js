@@ -1,25 +1,6 @@
+import { upgrades } from "./cosntants/upgrades.js"
 let gold = document.querySelector('.goldcost')
 let fixedgold = parseFloat(gold.innerHTML)
-let clickercost = document.querySelector('.clickercost')
-let clickerlevel = document.querySelector('.clickerlevel')
-let clickerincrease = document.querySelector('.cursorincrease')
-
-let fixedclickercost = parseFloat(clickercost.innerHTML)
-let fixedclickerincrease = parseFloat(clickerincrease.innerHTML)
-
-let pickaxecost = document.querySelector('.pickaxecost')
-let pickaxelevel = document.querySelector('.pickaxelevel')
-let pickaxeincrease = document.querySelector('.pickaxeincrease')
-
-let fixedpickaxecost = parseFloat(pickaxecost.innerHTML)
-let fixedpickaxeincrease = parseFloat(pickaxeincrease.innerHTML)
-
-let minercost = document.querySelector('.minercost')
-let minerlevel = document.querySelector('.minerlevel')
-let minerincrease = document.querySelector('.minerincrease')
-
-let fixedminercost = parseFloat(minercost.innerHTML)
-let fixedminerincrease = parseFloat(minerincrease.innerHTML)
 
 let gpctext = document.getElementById("gpctext")
 let gpstext = document.getElementById("gpstext")
@@ -52,62 +33,89 @@ div.remove()
 }
 
 function buyupgrade(upgrade){
+const mu = upgrades.find((u) => {
+    if (u.name === upgrade) return u
+})
 
+if (fixedgold >= mu.fixedcost) {
+    gold.innerHTML = Math.round(fixedgold -= mu.fixedcost);
+
+    mu.level.innerHTML ++
+
+    mu.fixedincrease = parseFloat((mu.fixedincrease).toFixed(2))
+    mu.increase.innerHTML = mu.fixedincrease
+    gps += mu.fixedincrease
+
+    mu.fixedcost *= mu.costmulti;
+    mu.cost.innerHTML = Math.round(mu.fixedcost)
+}
 }
 
+function save () {
+    localStorage.clear()
 
-function buyclicker() {
-    if (fixedgold >= fixedclickercost) {
-        gold.innerHTML = Math.round(fixedgold -= fixedclickercost);
-
-        clickerlevel.innerHTML ++
-
-        fixedclickerincrease = parseFloat((fixedclickerincrease).toFixed(2))
-        clickerincrease.innerHTML = fixedclickerincrease
-        gps += fixedclickerincrease
-
-
-        fixedclickercost *= 1.16
-        clickercost.innerHTML = Math.round(fixedclickercost)
-    }
-}
-
-function buypickaxe() {
-    if (fixedgold >= fixedpickaxecost) {
-        gold.innerHTML = Math.round(fixedgold -= fixedpickaxecost);
+    upgrades.map((upgrade) => {
         
-        pickaxelevel.innerHTML ++
+        const obj = JSON.stringify({
+            fixedlevel: parseFloat(upgrade.level.innerHTML),
+            fixedcost: upgrade.fixedcost,
+            fixedincrease: upgrade.fixedincrease
+        })
 
-        fixedpickaxeincrease = parseFloat((fixedpickaxeincrease).toFixed(2))
-        pickaxeincrease.innerHTML = fixedpickaxeincrease
-        gps += fixedpickaxeincrease
+        localStorage.setItem(upgrade.name, obj)
+    })
 
-
-        fixedpickaxecost *= 1.16
-        pickaxecost.innerHTML = Math.round(fixedpickaxecost)
-    }
+    localStorage.setItem('gps', JSON.stringify(gps))
+    localStorage.setItem('gpc', JSON.stringify(gpc))
+    localStorage.setItem('gold', JSON.stringify(fixedgold))
 }
 
-function buyminer() {
-    if (fixedgold >= fixedminercost) {
-        gold.innerHTML = Math.round(fixedgold -= fixedminercost);
-        
-        minerlevel.innerHTML ++
+function load () {
+    upgrades.map((upgrade) => {
+        const savedvalues = JSON.parse(localStorage.getItem(upgrade.name))
 
-        fixedminerincrease = parseFloat((fixedminerincrease).toFixed(2))
-        minerincrease.innerHTML = fixedminerincrease
-        gps += fixedminerincrease
+upgrade.fixedcost = savedvalues.fixedcost
+upgrade.fixedincrease = savedvalues.fixedincrease
 
+upgrade.level.innerHTML = savedvalues.fixedlevel
+upgrade.cost.innerHTML = Math.round(savedvalues.fixedcost)
+upgrade.increase.innerHTML = savedvalues.fixedincrease
 
-        fixedminercost *= 1.16
-        minercost.innerHTML = Math.round(fixedminercost)
-    }
+    })
+
+    gps = JSON.parse(localStorage.getItem('gps'))
+    gpc = JSON.parse(localStorage.getItem('gpc'))
+    fixedgold = JSON.parse(localStorage.getItem('gold'))
 }
 
 setInterval(() => {
-fixedgold += gps / 10
+fixedgold += gps / 100
 gold.innerHTML = Math.round(fixedgold)
 gpstext.innerHTML = Math.round(gps)
-}, 100)
+}, 10)
 
-console.log("bucetinha boa")
+setInterval(() => {
+    localStorage.clear()
+
+    upgrades.map((upgrade) => {
+        
+        const obj = JSON.stringify({
+            fixedlevel: parseFloat(upgrade.level.innerHTML),
+            fixedcost: upgrade.fixedcost,
+            fixedincrease: upgrade.fixedincrease
+        })
+
+        localStorage.setItem(upgrade.name, obj)
+    })
+
+
+    localStorage.setItem('gps', JSON.stringify(gps))
+    localStorage.setItem('gpc', JSON.stringify(gpc))
+    localStorage.setItem('gold', JSON.stringify(fixedgold))
+    console.log("save game")
+    }, 60000)
+
+    window.incrementgold = incrementgold
+    window.buyupgrade = buyupgrade
+    window.save = save
+    window.load = load
