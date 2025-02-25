@@ -4,6 +4,8 @@ let fixedgold = parseFloat(gold.innerHTML)
 
 let gpctext = document.getElementById("gpctext")
 let gpstext = document.getElementById("gpstext")
+let titlegold = document.querySelector(".titlegold")
+let fixedtitlegold = parseFloat(titlegold.innerHTML)
 
 let goldimagecontainer = document.querySelector(".goldimagecontainer")
 
@@ -90,8 +92,8 @@ upgrade.increase.innerHTML = savedvalues.fixedincrease
 
 setInterval(() => {
 fixedgold += gps / 100
-gold.innerHTML = Math.round(fixedgold)
-gpstext.innerHTML = Math.round(gps)
+gold.innerHTML = fixedgold.toFixed(1)
+gpstext.innerHTML = (gps.toFixed(1))
 }, 10)
 
 setInterval(() => {
@@ -119,3 +121,25 @@ setInterval(() => {
     window.buyupgrade = buyupgrade
     window.save = save
     window.load = load
+
+    upgrades.map((upgrade) => {
+        const savedvalues = JSON.parse(localStorage.getItem(upgrade.name))
+
+upgrade.fixedcost = savedvalues.fixedcost
+upgrade.fixedincrease = savedvalues.fixedincrease
+
+upgrade.level.innerHTML = savedvalues.fixedlevel
+upgrade.cost.innerHTML = Math.round(savedvalues.fixedcost)
+upgrade.increase.innerHTML = savedvalues.fixedincrease
+
+    })
+
+    gps = JSON.parse(localStorage.getItem('gps'))
+    gpc = JSON.parse(localStorage.getItem('gpc'))
+    fixedgold = JSON.parse(localStorage.getItem('gold'))
+
+    setInterval(() => {
+            fixedtitlegold = fixedgold
+            let title = fixedtitlegold.toFixed(1) + String(" golds - gold clicker")
+            titlegold.innerHTML = title
+    }, 3000)
